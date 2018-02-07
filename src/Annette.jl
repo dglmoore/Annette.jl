@@ -2,46 +2,46 @@ __precompile__(true)
 
 module Annette
 
-export Network, Automaton, fire, fire!, ECA
+export AbstractNetwork, AbstractAutomaton, fire, fire!, ECA
 
 """
-    Network
+    AbstractNetwork
 
 Abstract supertype from which all networks inherit
 """
-abstract type Network end
+abstract type AbstractNetwork end
 
 """
-    Automaton{T,N} <: Network
+    AbstractAutomaton{T,N} <: AbstractNetwork
 
 Abstract supertype from which automata inherit
 """
-abstract type Automaton{T,N} <: Network end
+abstract type AbstractAutomaton{T,N} <: AbstractNetwork end
 
 """
-    fire!(net::Automaton{T,N}, state::AbstractArray{T,N})
-    fire!(net::Automaton{T,N}, state::AbstractArray{T,N}, dest::AbstractArray{T,N})
+    fire!(net::AbstractAutomaton{T,N}, state::AbstractArray{T,N})
+    fire!(net::AbstractAutomaton{T,N}, state::AbstractArray{T,N}, dest::AbstractArray{T,N})
 
 Update an automaton `state` in-place according to the automaton rule `net`. If `dest` is
 provided, then the updated state is placed in `dest` and `state` is left unmodifed.  The
 updated state is returned.
 """
-function fire!(net::Automaton{T,N}, state::AbstractArray{T,N}) where {T,N}
+function fire!(net::AbstractAutomaton{T,N}, state::AbstractArray{T,N}) where {T,N}
     fire!(net, state, state)
 end
 
 """
-    fire(ca::Automaton{T,N}, state::AbstractArray{T,N})
+    fire(ca::AbstractAutomaton{T,N}, state::AbstractArray{T,N})
 
 Update an automaton `state` according to the rule `net`. The `state` argument is left
 unmodified, and the updated state is returned.
 """
-function fire(net::Automaton{T,N}, state::AbstractArray{T,N}) where {T,N}
+function fire(net::AbstractAutomaton{T,N}, state::AbstractArray{T,N}) where {T,N}
     fire!(net, state, copy(state))
 end
 
 """
-    ECA <: Automaton{Int,1}
+    ECA <: AbstractAutomaton{Int,1}
 
 An elementary cellular automaton.
 
@@ -61,7 +61,7 @@ julia> ECA(30, (1,0))
 Annette.ECA(0x1e, Nullable{Tuple{Int64,Int64}}((1, 0)))
 ```
 """
-type ECA <: Automaton{Int,1}
+type ECA <: AbstractAutomaton{Int,1}
     "The 8-bit Wolfram ECA code"
     code :: UInt8
     "The boundary conditions for the ECA"
