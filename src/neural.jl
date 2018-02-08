@@ -28,7 +28,6 @@ struct SimpleANN <: AbstractNeuralNetwork{Int,Int,1}
     end
 end
 
-SimpleANN(ws::AbstractArray{Float64,2}, ts::AbstractVector{Float64})
 SimpleANN(n::Int,m::Int) = SimpleANN(zeros(m,n), zeros(m))
 
 insize(net::SimpleANN) = (net.insize,)
