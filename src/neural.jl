@@ -39,9 +39,14 @@ function fire!(net::SimpleANN, input::Vector{Int}, output::Vector{Int})
     elseif net.outsize != length(output)
         throw(DimensionMismatch("invalid output"))
     end
-    temp = net.weights * input - net.thresholds
+    temp = zeros(Float64, net.outsize)
+    for j in 1:net.insize
+        for i in 1:net.outsize
+            temp[i] += net.weights[i,j] * input[j]
+        end
+    end
     for i in 1:net.outsize
-        output[i] = (temp[i] <= 0.) ? 0 : 1
+        output[i] = (temp[i] - net.thresholds[i] <= 0.) ? 0 : 1
     end
     output
 end
