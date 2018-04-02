@@ -33,20 +33,16 @@ SimpleANN(n::Int,m::Int) = SimpleANN(zeros(m,n), zeros(m))
 insize(net::SimpleANN) = (net.insize,)
 outsize(net::SimpleANN) = (net.outsize,)
 
-function fire!(net::SimpleANN, input::Vector{Int}, output::Vector{Int})
+function fire!(net::SimpleANN, input::AbstractVector{Int},
+               output::AbstractVector{Int})
     if net.insize != length(input)
         throw(DimensionMismatch("invalid input"))
     elseif net.outsize != length(output)
         throw(DimensionMismatch("invalid output"))
     end
-    temp = zeros(Float64, net.outsize)
-    for j in 1:net.insize
-        for i in 1:net.outsize
-            temp[i] += net.weights[i,j] * input[j]
-        end
-    end
+    temp = net.weights * input - net.thresholds
     for i in 1:net.outsize
-        output[i] = (temp[i] - net.thresholds[i] <= 0.) ? 0 : 1
+        output[i] = (temp[i] > 0.0)
     end
     output
 end
